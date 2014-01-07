@@ -1,3 +1,5 @@
+# setup the logstash directory
+
 directory "/usr/local/logstash" do
   owner "root"
   group "root"
@@ -42,6 +44,8 @@ cookbook_file "/usr/local/logstash/conf/shipper.conf" do
   mode "0755"
 end
 
+# Create the logstash-indexer service
+
 directory "/usr/local/logstash-indexer" do
   owner "root"
   group "root"
@@ -74,12 +78,84 @@ cookbook_file "/usr/local/logstash-indexer/log/run" do
   mode "0755"
 end
 
+# Create the logstash-shipper service
+
+directory "/usr/local/logstash-shipper" do
+  owner "root"
+  group "root"
+  mode 0755
+  action :create
+end
+
+directory "/usr/local/logstash-shipper/log" do
+  owner "root"
+  group "root"
+  mode 0755
+  action :create
+end
+
+link "/usr/local/logstash-shipper/logstash" do
+  to "/usr/local/logstash"
+end
+
+cookbook_file "/usr/local/logstash-shipper/run" do
+  source "logstash-shipper-run"
+  group "root"
+  owner "root"
+  mode "0755"
+end
+
+cookbook_file "/usr/local/logstash-shipper/log/run" do
+  source "logstash-indexer-log-run"
+  group "root"
+  owner "root"
+  mode "0755"
+end
+
+# Create the logstash-web service
+
+directory "/usr/local/logstash-web" do
+  owner "root"
+  group "root"
+  mode 0755
+  action :create
+end
+
+directory "/usr/local/logstash-web/log" do
+  owner "root"
+  group "root"
+  mode 0755
+  action :create
+end
+
+link "/usr/local/logstash-web/logstash" do
+  to "/usr/local/logstash"
+end
+
+cookbook_file "/usr/local/logstash-web/run" do
+  source "logstash-web-run"
+  group "root"
+  owner "root"
+  mode "0755"
+end
+
+cookbook_file "/usr/local/logstash-web/log/run" do
+  source "logstash-indexer-log-run"
+  group "root"
+  owner "root"
+  mode "0755"
+end
+
+# setup the music lager directory
+
 directory "/usr/local/music-lager-server" do
   owner "root"
   group "root"
   mode 0755
   action :create
 end
+
+# start various services
 
 service "elasticsearch" do
   action :start
@@ -91,6 +167,14 @@ end
 
 link "/etc/service/logstash-indexer" do
   to "/usr/local/logstash-indexer"
+end
+
+link "/etc/service/logstash-shipper" do
+  to "/usr/local/logstash-shipper"
+end
+
+link "/etc/service/logstash-web" do
+  to "/usr/local/logstash-web"
 end
 
 service "svscan" do
