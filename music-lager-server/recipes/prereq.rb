@@ -1,2 +1,6 @@
 package "openjdk-7-jdk"
 package "redis-server"
+package "redis-server"
+package "python-flask"
+package "daemontools"
+package "daemontools-run"

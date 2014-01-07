@@ -24,6 +24,10 @@ remote_file "/usr/local/logstash/jar/logstash-1.3.2-flatjar.jar" do
   mode 00644
 end
 
+link "/usr/local/logstash/jar/logstash.jar" do
+  to "/usr/local/logstash/jar/logstash-1.3.2-flatjar.jar"
+end
+
 cookbook_file "/usr/local/logstash/conf/indexer.conf" do
   source "indexer.conf"
   group "root"
@@ -33,6 +37,38 @@ end
 
 cookbook_file "/usr/local/logstash/conf/shipper.conf" do
   source "shipper.conf"
+  group "root"
+  owner "root"
+  mode "0755"
+end
+
+directory "/usr/local/logstash-indexer" do
+  owner "root"
+  group "root"
+  mode 0755
+  action :create
+end
+
+directory "/usr/local/logstash-indexer/log" do
+  owner "root"
+  group "root"
+  mode 0755
+  action :create
+end
+
+link "/usr/local/logstash-indexer/logstash" do
+  to "/usr/local/logstash"
+end
+
+cookbook_file "/usr/local/logstash-indexer/run" do
+  source "logstash-indexer-run"
+  group "root"
+  owner "root"
+  mode "0755"
+end
+
+cookbook_file "/usr/local/logstash-indexer/log/run" do
+  source "logstash-indexer-log-run"
   group "root"
   owner "root"
   mode "0755"
@@ -50,5 +86,13 @@ service "elasticsearch" do
 end
 
 service "redis" do
+  action :start
+end
+
+link "/etc/service/logstash-indexer" do
+  to "/usr/local/logstash-indexer"
+end
+
+service "svscan" do
   action :start
 end
