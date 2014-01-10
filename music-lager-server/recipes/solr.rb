@@ -47,6 +47,13 @@ cookbook_file "/var/solr/collection1/conf/solrconfig.xml" do
   mode "0755"
 end
 
+cookbook_file "/var/solr/collection1/conf/schema.xml" do
+  source "schema.xml"
+  group "root"
+  owner "root"
+  mode "0755"
+end
+
 directory "/usr/local/solr-service" do
   owner "root"
   group "root"
