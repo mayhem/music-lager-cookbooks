@@ -1625,13 +1625,13 @@
          <bool name="enabled">true</bool>
          <str name="signatureField">id</str>
          <bool name="overwriteDupes">false</bool>
-         <str name="fields">name,features,cat</str>
+         <str name="fields">timestamp,artist,track</str>
          <str name="signatureClass">solr.processor.Lookup3Signature</str>
        </processor>
        <processor class="solr.LogUpdateProcessorFactory" />
        <processor class="solr.RunUpdateProcessorFactory" />
      </updateRequestProcessorChain>
-    -->
+  -->
 
   <!-- Language identification
 
