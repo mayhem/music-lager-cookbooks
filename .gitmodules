@@ -1,6 +1,3 @@
-[submodule "cookbook-elasticsearch"]
-	path = cookbook-elasticsearch
-	url = https://github.com/elasticsearch/cookbook-elasticsearch.git
 [submodule "redisio"]
 	path = redisio
 	url = https://github.com/brianbianco/redisio.git
@@ -22,3 +19,6 @@
 [submodule "music-lager-server-cookbook"]
 	path = music-lager-server-cookbook
 	url = ./music-lager-server-cookbook/
+[submodule "tar"]
+	path = tar
+	url = git@github.com:cramerdev/tar-cookbook.git

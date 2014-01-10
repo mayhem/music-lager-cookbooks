@@ -23,7 +23,8 @@ end
 
 remote_file "/usr/local/logstash/jar/logstash-1.3.2-flatjar.jar" do
   source "https://download.elasticsearch.org/logstash/logstash/logstash-1.3.2-flatjar.jar"
-  mode 00644
+  mode 0644
+  action :create_if_missing
 end
 
 link "/usr/local/logstash/jar/logstash.jar" do
@@ -112,40 +113,6 @@ cookbook_file "/usr/local/logstash-shipper/log/run" do
   mode "0755"
 end
 
-# Create the logstash-web service
-
-directory "/usr/local/logstash-web" do
-  owner "root"
-  group "root"
-  mode 0755
-  action :create
-end
-
-directory "/usr/local/logstash-web/log" do
-  owner "root"
-  group "root"
-  mode 0755
-  action :create
-end
-
-link "/usr/local/logstash-web/logstash" do
-  to "/usr/local/logstash"
-end
-
-cookbook_file "/usr/local/logstash-web/run" do
-  source "logstash-web-run"
-  group "root"
-  owner "root"
-  mode "0755"
-end
-
-cookbook_file "/usr/local/logstash-web/log/run" do
-  source "logstash-indexer-log-run"
-  group "root"
-  owner "root"
-  mode "0755"
-end
-
 # setup the music lager directory
 
 directory "/usr/local/music-lager-server" do
@@ -157,10 +124,6 @@ end
 
 # start various services
 
-service "elasticsearch" do
-  action :start
-end
-
 service "redis" do
   action :start
 end
@@ -171,10 +134,6 @@ end
 
 link "/etc/service/logstash-shipper" do
   to "/usr/local/logstash-shipper"
-end
-
-link "/etc/service/logstash-web" do
-  to "/usr/local/logstash-web"
 end
 
 service "svscan" do
